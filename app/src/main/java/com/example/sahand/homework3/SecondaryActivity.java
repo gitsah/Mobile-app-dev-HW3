@@ -4,6 +4,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,14 +18,19 @@ public class SecondaryActivity extends AppCompatActivity {
     private static final String ARG_PARAM_NAMEANDAGE = "nameAndAge";
     private static final String ARG_PARAM_OCCUPATION = "occupation";
     private static final String ARG_PARAM_DESCRIPTION = "description";
+    private static final String ARG_DATA_SET = "matches";
 
     private Bundle profileBundle;
+    private Bundle matchesBundle;
+    private FirebaseMatchesViewModel firebaseMatchesViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme2);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secondary);
+
+        firebaseMatchesViewModel = new FirebaseMatchesViewModel();
 
         profileBundle = new Bundle();
         profileBundle.putString(ARG_PARAM_NAMEANDAGE, getIntent().getStringExtra("NAMEANDAGE"));
@@ -41,6 +47,30 @@ public class SecondaryActivity extends AppCompatActivity {
         // Set Tabs inside Toolbar
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+
+        firebaseMatchesViewModel.getMatches(
+                (ArrayList<Match> matches) -> {
+            FragmentManager manager = getSupportFragmentManager();
+            MatchesFragment fragment = (MatchesFragment) manager.findFragmentByTag("matchesFragment");
+
+            if (fragment != null) {
+                // Remove fragment to re-add it
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.remove(fragment);
+                transaction.commit();
+            }
+
+            matchesBundle = new Bundle();
+            matchesBundle.putParcelableArrayList(ARG_DATA_SET, matches);
+
+            MatchesFragment matchesFragment = new MatchesFragment();
+            matchesFragment.setArguments(matchesBundle);
+
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.add(R.id.matchesView, matchesFragment, "matchesFragment");
+            transaction.commit();
+        }
+        );
 
 //        if (savedInstanceState != null) {
 //            nameAndAge.setText(savedInstanceState.getString("NAMEANDAGE"));
@@ -62,7 +92,7 @@ public class SecondaryActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new ProfileFragment(), "Profile", profileBundle);
-        adapter.addFragment(new MatchesFragment(), "Matches");
+        adapter.addFragment(new MatchesFragment(), "Matches", matchesBundle);
         adapter.addFragment(new SettingsFragment(), "Settings");
         viewPager.setAdapter(adapter);
     }

@@ -4,23 +4,32 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 
 public class MatchesFragment extends Fragment {
+
+    private static final String ARG_DATA_SET = "matches";
+
+    private ArrayList<Match> matches;
+
+    public static String matchNames[];
+    public static String matchPics[];
+    public static String matchDescs[];
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -30,6 +39,10 @@ public class MatchesFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        if(getArguments() != null) {
+            matches = getArguments().getParcelableArrayList(ARG_DATA_SET);
+        }
 
         return recyclerView;
     }
@@ -47,23 +60,24 @@ public class MatchesFragment extends Fragment {
             likeButton = itemView.findViewById(R.id.like_button);
         }
     }
+
     /**
      * Adapter to display recycler view.
      */
     public static class ContentAdapter extends RecyclerView.Adapter<ViewHolder> {
         // Set numbers of List in RecyclerView.
         private static final int LENGTH = 18;
-        private final String[] mPlaces;
-        private final String[] mPlaceDesc;
-        private final Drawable[] mPlacePictures;
+        private final String[] mMatches;
+        private final String[] mMatchDesc;
+        private final Drawable[] mMatchPictures;
         ContentAdapter(Context context) {
             Resources resources = context.getResources();
-            mPlaces = resources.getStringArray(R.array.places);
-            mPlaceDesc = resources.getStringArray(R.array.place_desc);
+            mMatches = resources.getStringArray(R.array.places);
+            mMatchDesc = resources.getStringArray(R.array.place_desc);
             TypedArray a = resources.obtainTypedArray(R.array.places_picture);
-            mPlacePictures = new Drawable[a.length()];
-            for (int i = 0; i < mPlacePictures.length; i++) {
-                mPlacePictures[i] = a.getDrawable(i);
+            mMatchPictures = new Drawable[a.length()];
+            for (int i = 0; i < mMatchPictures.length; i++) {
+                mMatchPictures[i] = a.getDrawable(i);
             }
             a.recycle();
         }
@@ -75,9 +89,9 @@ public class MatchesFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.picture.setImageDrawable(mPlacePictures[position % mPlacePictures.length]);
-            holder.name.setText(mPlaces[position % mPlaces.length]);
-            holder.description.setText(mPlaceDesc[position % mPlaceDesc.length]);
+            holder.picture.setImageDrawable(mMatchPictures[position % mMatchPictures.length]);
+            holder.name.setText(mMatches[position % mMatches.length]);
+            holder.description.setText(mMatchDesc[position % mMatchDesc.length]);
             holder.likeButton.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
