@@ -23,12 +23,15 @@ public class SecondaryActivity extends AppCompatActivity {
     private Bundle profileBundle;
     private Bundle matchesBundle;
     private FirebaseMatchesViewModel firebaseMatchesViewModel;
+    private Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme2);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secondary);
+
+        adapter = new Adapter(getSupportFragmentManager());
 
         firebaseMatchesViewModel = new FirebaseMatchesViewModel();
 
@@ -50,15 +53,15 @@ public class SecondaryActivity extends AppCompatActivity {
 
         firebaseMatchesViewModel.getMatches(
                 (ArrayList<Match> matches) -> {
-            FragmentManager manager = getSupportFragmentManager();
-            MatchesFragment fragment = (MatchesFragment) manager.findFragmentByTag("matchesFragment");
-
-            if (fragment != null) {
-                // Remove fragment to re-add it
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.remove(fragment);
-                transaction.commit();
-            }
+//            FragmentManager manager = getSupportFragmentManager();
+//            MatchesFragment fragment = (MatchesFragment) manager.findFragmentByTag("matchesFragment");
+//
+//            if (fragment != null) {
+//                // Remove fragment to re-add it
+//                FragmentTransaction transaction = manager.beginTransaction();
+//                transaction.remove(fragment);
+//                transaction.commit();
+//            }
 
             matchesBundle = new Bundle();
             matchesBundle.putParcelableArrayList(ARG_DATA_SET, matches);
@@ -66,9 +69,12 @@ public class SecondaryActivity extends AppCompatActivity {
             MatchesFragment matchesFragment = new MatchesFragment();
             matchesFragment.setArguments(matchesBundle);
 
-            FragmentTransaction transaction = manager.beginTransaction();
-            transaction.add(R.id.matchesView, matchesFragment, "matchesFragment");
-            transaction.commit();
+
+            adapter.replaceFragment(matchesFragment, "Matches", 1);
+
+//            FragmentTransaction transaction = manager.beginTransaction();
+//            transaction.add(R.id.matchesView, matchesFragment, "matchesFragment");
+//            transaction.commit();
         }
         );
 
@@ -90,7 +96,6 @@ public class SecondaryActivity extends AppCompatActivity {
 
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
         adapter.addFragment(new ProfileFragment(), "Profile", profileBundle);
         adapter.addFragment(new MatchesFragment(), "Matches", matchesBundle);
         adapter.addFragment(new SettingsFragment(), "Settings");
@@ -124,6 +129,15 @@ public class SecondaryActivity extends AppCompatActivity {
             fragment.setArguments(bundle);
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
+        }
+
+        public void replaceFragment(Fragment fragment, String title, int index) {
+            mFragmentList.remove(index);
+            mFragmentList.add(index, fragment);
+            mFragmentTitleList.remove(index);
+            mFragmentTitleList.add(index, title);
+            notifyDataSetChanged();
+
         }
 
         @Override
