@@ -137,7 +137,6 @@ public class SecondaryActivity extends AppCompatActivity {
             mFragmentTitleList.remove(index);
             mFragmentTitleList.add(index, title);
             notifyDataSetChanged();
-
         }
 
         @Override

@@ -21,6 +21,26 @@ public class Match implements Parcelable {
         this.description = "Placeholder Description";
     }
 
+    protected Match(Parcel in) {
+        name = in.readString();
+        imageUrl = in.readString();
+        uid = in.readString();
+        description = in.readString();
+        done = in.readByte() != 0;
+    }
+
+    public static final Creator<Match> CREATOR = new Creator<Match>() {
+        @Override
+        public Match createFromParcel(Parcel in) {
+            return new Match(in);
+        }
+
+        @Override
+        public Match[] newArray(int size) {
+            return new Match[size];
+        }
+    };
+
     public String getName() {
         return name;
     }

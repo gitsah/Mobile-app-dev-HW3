@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 
 public class MatchesFragment extends Fragment {
@@ -67,13 +68,16 @@ public class MatchesFragment extends Fragment {
     public static class ContentAdapter extends RecyclerView.Adapter<ViewHolder> {
         // Set numbers of List in RecyclerView.
         private static final int LENGTH = 18;
-        private final String[] mMatches;
-        private final String[] mMatchDesc;
-        private final Drawable[] mMatchPictures;
+        private final List<Match> mMatchesList = new ArrayList<>();
+        private String[] mMatches;
+        private String[] mMatchDescs;
+        private Drawable[] mMatchPictures;
         ContentAdapter(Context context) {
             Resources resources = context.getResources();
-            mMatches = resources.getStringArray(R.array.places);
-            mMatchDesc = resources.getStringArray(R.array.place_desc);
+//            mMatches = resources.getStringArray(R.array.places);
+//            mMatchDescs = resources.getStringArray(R.array.place_desc);
+
+            updateLists();
             TypedArray a = resources.obtainTypedArray(R.array.places_picture);
             mMatchPictures = new Drawable[a.length()];
             for (int i = 0; i < mMatchPictures.length; i++) {
@@ -82,23 +86,43 @@ public class MatchesFragment extends Fragment {
             a.recycle();
         }
 
+        private void updateLists () {
+            String[] tempMatches = new String[mMatchesList.size()];
+            String[] tempDescs = new String[mMatchesList.size()];
+            String[] tempPictures = new String[mMatchesList.size()];
+            for(int i = 0; i < mMatchesList.size(); i++) {
+                tempMatches[i] = mMatchesList.get(i).getName();
+                tempDescs[i] = mMatchesList.get(i).getDescription();
+                tempPictures[i] = mMatchesList.get(i).getImageUrl();
+            }
+
+            mMatches = tempMatches;
+            mMatchDescs = tempDescs;
+        }
+
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new ViewHolder(LayoutInflater.from(parent.getContext()), parent);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, int position, List<Object> payloads) {
             holder.picture.setImageDrawable(mMatchPictures[position % mMatchPictures.length]);
             holder.name.setText(mMatches[position % mMatches.length]);
-            holder.description.setText(mMatchDesc[position % mMatchDesc.length]);
-            holder.likeButton.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    String toastText = "You liked " + holder.name.getText();
-                    Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
-                }
+            holder.description.setText(mMatchDescs[position % mMatchDescs.length]);
+            holder.likeButton.setOnClickListener(v -> {
+                String toastText = "You liked " + holder.name.getText();
+                Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
             });
+        }
+
+        public void updateMatchesListItems(List<Match> matches) {
+            final MatchesDiffCallback diffCallback = new MatchesDiffCallback(this.mMatchesList, matches);
+            final DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+
+            this.mMatchesList.clear();
+            this.mMatchesList.addAll(matches);
+            diffResult.dispatchUpdatesTo(this);
         }
 
         @Override
