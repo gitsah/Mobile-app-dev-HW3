@@ -18,12 +18,12 @@ public class FirebaseMatchesViewModel {
         dataModel = new FirebaseDataModel();
     }
 
-    public void likeMatch(Match match) {
-        dataModel.likeMatch(match);
+    public void likeMatch(String uid) {
+        dataModel.likeMatch(uid);
     }
 
-    public void unlikeMatch(Match match) {
-        dataModel.unlikeMatch(match);
+    public void unlikeMatch(String uid) {
+        dataModel.unlikeMatch(uid);
     }
 
     public void getMatches(Consumer<ArrayList<Match>> responseCallback) {

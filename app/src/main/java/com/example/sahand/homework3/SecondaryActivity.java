@@ -18,10 +18,9 @@ public class SecondaryActivity extends AppCompatActivity {
     private static final String ARG_PARAM_NAMEANDAGE = "nameAndAge";
     private static final String ARG_PARAM_OCCUPATION = "occupation";
     private static final String ARG_PARAM_DESCRIPTION = "description";
-    private static final String ARG_DATA_SET = "matches";
 
     private Bundle profileBundle;
-    private Bundle matchesBundle;
+    private MatchesFragment matchesFragment;
     private FirebaseMatchesViewModel firebaseMatchesViewModel;
     private Adapter adapter;
 
@@ -40,6 +39,8 @@ public class SecondaryActivity extends AppCompatActivity {
         profileBundle.putString(ARG_PARAM_OCCUPATION, getIntent().getStringExtra("OCCUPATION"));
         profileBundle.putString(ARG_PARAM_DESCRIPTION, getIntent().getStringExtra("DESCRIPTION"));
 
+        matchesFragment = new MatchesFragment();
+
         // Adding Toolbar to Main screen
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -47,34 +48,25 @@ public class SecondaryActivity extends AppCompatActivity {
         // Setting ViewPager for each Tabs
         ViewPager viewPager = findViewById(R.id.viewpager);
         setupViewPager(viewPager);
+
         // Set Tabs inside Toolbar
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
 
         firebaseMatchesViewModel.getMatches(
                 (ArrayList<Match> matches) -> {
-//            FragmentManager manager = getSupportFragmentManager();
-//            MatchesFragment fragment = (MatchesFragment) manager.findFragmentByTag("matchesFragment");
+                    matchesFragment.populateMatches(matches);
+                    
+//            matchesBundle = new Bundle();
+//            matchesBundle.putParcelableArrayList(ARG_DATA_SET, matches);
+//            //matchesBundle.putString("test","test");
 //
-//            if (fragment != null) {
-//                // Remove fragment to re-add it
-//                FragmentTransaction transaction = manager.beginTransaction();
-//                transaction.remove(fragment);
-//                transaction.commit();
-//            }
-
-            matchesBundle = new Bundle();
-            matchesBundle.putParcelableArrayList(ARG_DATA_SET, matches);
-
-            MatchesFragment matchesFragment = new MatchesFragment();
-            matchesFragment.setArguments(matchesBundle);
-
-
-            adapter.replaceFragment(matchesFragment, "Matches", 1);
-
-//            FragmentTransaction transaction = manager.beginTransaction();
-//            transaction.add(R.id.matchesView, matchesFragment, "matchesFragment");
-//            transaction.commit();
+//            MatchesFragment matchesFragment = new MatchesFragment();
+//            matchesFragment.setArguments(matchesBundle);
+//
+//
+//                    System.out.println("here now");
+//            adapter.replaceFragment(matchesFragment, "Matches", 1);
         }
         );
 
@@ -97,7 +89,7 @@ public class SecondaryActivity extends AppCompatActivity {
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
         adapter.addFragment(new ProfileFragment(), "Profile", profileBundle);
-        adapter.addFragment(new MatchesFragment(), "Matches", matchesBundle);
+        adapter.addFragment(matchesFragment, "Matches");
         adapter.addFragment(new SettingsFragment(), "Settings");
         viewPager.setAdapter(adapter);
     }
@@ -129,14 +121,6 @@ public class SecondaryActivity extends AppCompatActivity {
             fragment.setArguments(bundle);
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
-        }
-
-        public void replaceFragment(Fragment fragment, String title, int index) {
-            mFragmentList.remove(index);
-            mFragmentList.add(index, fragment);
-            mFragmentTitleList.remove(index);
-            mFragmentTitleList.add(index, title);
-            notifyDataSetChanged();
         }
 
         @Override

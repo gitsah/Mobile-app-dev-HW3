@@ -8,15 +8,15 @@ public class Match implements Parcelable {
     private String imageUrl;
     private String uid;
     private String description;
-
-    public boolean done;
+    private boolean liked;
 
     public Match() {}
 
-    public Match(String name, String imageUrl, String uid) {
+    public Match(String name, String imageUrl, String uid, boolean liked) {
         this.name = name;
         this.imageUrl = imageUrl;
         this.uid = uid;
+        this.liked = liked;
 
         this.description = "Placeholder Description";
     }
@@ -26,7 +26,7 @@ public class Match implements Parcelable {
         imageUrl = in.readString();
         uid = in.readString();
         description = in.readString();
-        done = in.readByte() != 0;
+        liked = in.readByte() != 0;
     }
 
     public static final Creator<Match> CREATOR = new Creator<Match>() {
@@ -57,6 +57,10 @@ public class Match implements Parcelable {
         return description;
     }
 
+    public boolean getLiked() {
+        return liked;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -65,6 +69,8 @@ public class Match implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeByte((byte) (done ? 1 : 0));
+        dest.writeString(imageUrl);
+        dest.writeString(description);
+        dest.writeByte((byte) (liked ? 1 : 0));
     }
 }

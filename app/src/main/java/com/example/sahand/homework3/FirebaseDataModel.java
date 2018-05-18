@@ -25,14 +25,14 @@ public class FirebaseDataModel {
 //        todoItemsRef.push().setValue(item);
 //    }
 
-    public void likeMatch(Match match) {
+    public void likeMatch(String uid) {
         DatabaseReference matchesRef = mDatabase.child("matches");
-        matchesRef.child(match.getUid()).child("liked").setValue(true);
+        matchesRef.child(uid).child("liked").setValue(true);
     }
 
-    public void unlikeMatch(Match match) {
+    public void unlikeMatch(String uid) {
         DatabaseReference matchesRef = mDatabase.child("matches");
-        matchesRef.child(match.getUid()).child("liked").setValue(false);
+        matchesRef.child(uid).child("liked").setValue(false);
     }
 
     public void getMatches(Consumer<DataSnapshot> dataChangedCallback, Consumer<DatabaseError> dataErrorCallback) {
