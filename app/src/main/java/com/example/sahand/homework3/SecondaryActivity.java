@@ -21,7 +21,6 @@ public class SecondaryActivity extends AppCompatActivity {
 
     private Bundle profileBundle;
     private MatchesFragment matchesFragment;
-    private FirebaseMatchesViewModel firebaseMatchesViewModel;
     private Adapter adapter;
 
     @Override
@@ -32,7 +31,7 @@ public class SecondaryActivity extends AppCompatActivity {
 
         adapter = new Adapter(getSupportFragmentManager());
 
-        firebaseMatchesViewModel = new FirebaseMatchesViewModel();
+        FirebaseMatchesViewModel firebaseMatchesViewModel = new FirebaseMatchesViewModel();
 
         profileBundle = new Bundle();
         profileBundle.putString(ARG_PARAM_NAMEANDAGE, getIntent().getStringExtra("NAMEANDAGE"));
@@ -40,6 +39,23 @@ public class SecondaryActivity extends AppCompatActivity {
         profileBundle.putString(ARG_PARAM_DESCRIPTION, getIntent().getStringExtra("DESCRIPTION"));
 
         matchesFragment = new MatchesFragment();
+
+        firebaseMatchesViewModel.getMatches(
+                (ArrayList<Match> matches) -> {
+                    matchesFragment.populateMatches(matches);
+
+//            matchesBundle = new Bundle();
+//            matchesBundle.putParcelableArrayList(ARG_DATA_SET, matches);
+//            //matchesBundle.putString("test","test");
+//
+//            MatchesFragment matchesFragment = new MatchesFragment();
+//            matchesFragment.setArguments(matchesBundle);
+//
+//
+//                    System.out.println("here now");
+//            adapter.replaceFragment(matchesFragment, "Matches", 1);
+                }
+        );
 
         // Adding Toolbar to Main screen
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -52,23 +68,6 @@ public class SecondaryActivity extends AppCompatActivity {
         // Set Tabs inside Toolbar
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-
-        firebaseMatchesViewModel.getMatches(
-                (ArrayList<Match> matches) -> {
-                    matchesFragment.populateMatches(matches);
-                    
-//            matchesBundle = new Bundle();
-//            matchesBundle.putParcelableArrayList(ARG_DATA_SET, matches);
-//            //matchesBundle.putString("test","test");
-//
-//            MatchesFragment matchesFragment = new MatchesFragment();
-//            matchesFragment.setArguments(matchesBundle);
-//
-//
-//                    System.out.println("here now");
-//            adapter.replaceFragment(matchesFragment, "Matches", 1);
-        }
-        );
 
 //        if (savedInstanceState != null) {
 //            nameAndAge.setText(savedInstanceState.getString("NAMEANDAGE"));
