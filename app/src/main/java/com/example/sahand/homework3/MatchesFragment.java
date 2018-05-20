@@ -1,9 +1,6 @@
 package com.example.sahand.homework3;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,9 +15,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class MatchesFragment extends Fragment {
@@ -28,10 +23,12 @@ public class MatchesFragment extends Fragment {
     private FirebaseDataModel firebaseDataModel = new FirebaseDataModel();
     private ArrayList<Match> matches = new ArrayList<>();
 
+    private RecyclerView recyclerView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        RecyclerView recyclerView = (RecyclerView) inflater.inflate(
+        recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
 
         ContentAdapter adapter = new ContentAdapter(recyclerView.getContext());
@@ -42,8 +39,13 @@ public class MatchesFragment extends Fragment {
         return recyclerView;
     }
 
-    public void populateMatches(ArrayList<Match> matches) {
+    public void updateMatches(ArrayList<Match> matches) {
         this.matches = matches;
+
+        ContentAdapter adapter = new ContentAdapter(recyclerView.getContext());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
