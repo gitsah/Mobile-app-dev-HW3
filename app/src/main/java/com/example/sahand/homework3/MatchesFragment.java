@@ -17,13 +17,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-
 public class MatchesFragment extends Fragment {
 
     private FirebaseDataModel firebaseDataModel = new FirebaseDataModel();
     private ArrayList<Match> matches = new ArrayList<>();
 
     private RecyclerView recyclerView;
+    private ContentAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,7 +31,7 @@ public class MatchesFragment extends Fragment {
         recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
 
-        ContentAdapter adapter = new ContentAdapter(recyclerView.getContext());
+        adapter = new ContentAdapter(recyclerView.getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -42,9 +42,7 @@ public class MatchesFragment extends Fragment {
     public void updateMatches(ArrayList<Match> matches) {
         this.matches = matches;
 
-        ContentAdapter adapter = new ContentAdapter(recyclerView.getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
+        adapter = new ContentAdapter(recyclerView.getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
@@ -68,7 +66,9 @@ public class MatchesFragment extends Fragment {
     class ContentAdapter extends RecyclerView.Adapter<ViewHolder> {
         // Set numbers of List in RecyclerView.
         private static final int LENGTH = 18;
-        ContentAdapter(Context context) {}
+
+
+        ContentAdapter(Context context) { }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -78,12 +78,14 @@ public class MatchesFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             int size = matches.size();
+            int index = position % matches.size();
+
             if(size > 0){
-                String url = matches.get(position % size).getImageUrl();
+                String url = matches.get(index).getImageUrl();
                 Picasso.get().load(url).into(holder.picture);
-                holder.name.setText(matches.get(position % size).getName());
-                holder.name.setTag(matches.get(position % size).getUid());
-                holder.description.setText(matches.get(position % size).getDescription());
+                holder.name.setText(matches.get(index).getName());
+                holder.name.setTag(matches.get(index).getUid());
+                holder.description.setText(matches.get(index).getDescription());
                 holder.likeButton.setOnClickListener(v -> {
                     String toastText = "You liked " + holder.name.getText();
                     Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
@@ -91,7 +93,6 @@ public class MatchesFragment extends Fragment {
                 });
             }
         }
-
 
         @Override
         public int getItemCount() {
