@@ -62,7 +62,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void to2ndPageAndBack() {
+    public void to2ndPageAndBack() throws InterruptedException {
         goOffline();
         onView(withId(R.id.name_field)).perform(typeText("John Michaels")).perform(closeSoftKeyboard());
         onView(withId(R.id.date_of_birth_field)).perform(typeText("01/20/1989")).perform(closeSoftKeyboard());
@@ -75,6 +75,8 @@ public class MainActivityTest {
         onView(withId(R.id.occupation_display)).check(matches(withText("Carpenter")));
         onView(withId(R.id.description_display)).check(matches(withText("I'm a pretty cool dude")));
         onView(withId(R.id.viewpager)).perform(swipeLeft());
+        Thread.sleep(700);
+        onView(withRecyclerView(R.id.my_recycler_view).atPositionOnView(1, R.id.like_button)).perform(click());
         onView(withId(R.id.viewpager)).perform(swipeUp());
         onView(withId(R.id.viewpager)).perform(swipeUp());
         onView(withId(R.id.viewpager)).perform(swipeUp());
@@ -87,5 +89,10 @@ public class MainActivityTest {
         onView(withId(R.id.username_field)).check(matches(withText("")));
         onView(withId(R.id.occupation_field)).check(matches(withText("")));
         onView(withId(R.id.description_field)).check(matches(withText("")));
+    }
+
+    //helper
+    public static RecyclerViewMatcher withRecyclerView(final int recyclerViewId) {
+        return new RecyclerViewMatcher(recyclerViewId);
     }
 }
