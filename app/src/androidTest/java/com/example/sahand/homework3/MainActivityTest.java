@@ -15,6 +15,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.google.firebase.database.DatabaseReference.goOffline;
 
 public class MainActivityTest {
 
@@ -61,6 +62,7 @@ public class MainActivityTest {
 
     @Test
     public void to2ndPageAndBack() {
+        goOffline();
         onView(withId(R.id.name_field)).perform(typeText("John Michaels")).perform(closeSoftKeyboard());
         onView(withId(R.id.date_of_birth_field)).perform(typeText("01/20/1989")).perform(closeSoftKeyboard());
         onView(withId(R.id.email_field)).perform(typeText("JohnM@gmail.com")).perform(closeSoftKeyboard());

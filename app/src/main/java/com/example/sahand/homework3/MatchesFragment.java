@@ -78,9 +78,9 @@ public class MatchesFragment extends Fragment {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             int size = matches.size();
-            int index = position % matches.size();
 
             if(size > 0){
+                int index = position % matches.size();
                 String url = matches.get(index).getImageUrl();
                 Picasso.get().load(url).into(holder.picture);
                 holder.name.setText(matches.get(index).getName());
