@@ -75,7 +75,7 @@ public class MainActivityTest {
         onView(withId(R.id.occupation_display)).check(matches(withText("Carpenter")));
         onView(withId(R.id.description_display)).check(matches(withText("I'm a pretty cool dude")));
         onView(withId(R.id.viewpager)).perform(swipeLeft());
-        Thread.sleep(700);
+        Thread.sleep(3000);
         onView(withRecyclerView(R.id.my_recycler_view).atPositionOnView(1, R.id.like_button)).perform(click());
         onView(withId(R.id.viewpager)).perform(swipeUp());
         onView(withId(R.id.viewpager)).perform(swipeUp());
