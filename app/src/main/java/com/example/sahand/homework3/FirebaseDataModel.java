@@ -30,10 +30,10 @@ public class FirebaseDataModel {
         matchesRef.child(uid).child("liked").setValue(true);
     }
 
-    public void unlikeMatch(String uid) {
-        DatabaseReference matchesRef = mDatabase.child("matches");
-        matchesRef.child(uid).child("liked").setValue(false);
-    }
+//    public void unlikeMatch(String uid) {
+//        DatabaseReference matchesRef = mDatabase.child("matches");
+//        matchesRef.child(uid).child("liked").setValue(false);
+//    }
 
     public void getMatches(Consumer<DataSnapshot> dataChangedCallback, Consumer<DatabaseError> dataErrorCallback) {
         DatabaseReference matchesRef = mDatabase.child("matches");

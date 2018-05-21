@@ -12,14 +12,14 @@ public class Match implements Parcelable {
 
     public Match() {}
 
-    public Match(String name, String imageUrl, String uid, boolean liked) {
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.uid = uid;
-        this.liked = liked;
-
-        this.description = "Placeholder Description";
-    }
+//    public Match(String name, String imageUrl, String uid, boolean liked) {
+//        this.name = name;
+//        this.imageUrl = imageUrl;
+//        this.uid = uid;
+//        this.liked = liked;
+//
+//        this.description = "Placeholder Description";
+//    }
 
     protected Match(Parcel in) {
         name = in.readString();
