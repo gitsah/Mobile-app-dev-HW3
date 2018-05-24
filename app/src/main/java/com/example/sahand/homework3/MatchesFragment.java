@@ -89,8 +89,7 @@ public class MatchesFragment extends Fragment {
                 holder.description.setText(matches.get(index).getDescription());
 
                 if(matches.get(index).getLiked()) {
-                    System.out.println("hit it");
-                    holder.likeButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_liked));
+                    holder.likeButton.setImageResource(R.drawable.ic_liked);
                     holder.likeButton.setTag(true);
                 }
                 else {
