@@ -77,6 +77,7 @@ public class MainActivityTest {
         onView(withId(R.id.viewpager)).perform(swipeLeft());
         Thread.sleep(3000);
         onView(withRecyclerView(R.id.my_recycler_view).atPositionOnView(0, R.id.like_button)).perform(click());
+        onView(withRecyclerView(R.id.my_recycler_view).atPositionOnView(0, R.id.like_button)).perform(click());
         onView(withId(R.id.viewpager)).perform(swipeUp());
         onView(withId(R.id.viewpager)).perform(swipeUp());
         onView(withId(R.id.viewpager)).perform(swipeUp());

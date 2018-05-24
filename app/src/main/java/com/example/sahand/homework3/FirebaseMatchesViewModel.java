@@ -22,9 +22,9 @@ public class FirebaseMatchesViewModel {
         dataModel.likeMatch(uid);
     }
 
-//    public void unlikeMatch(String uid) {
-//        dataModel.unlikeMatch(uid);
-//    }
+    public void unlikeMatch(String uid) {
+        dataModel.unlikeMatch(uid);
+    }
 
     public void getMatches(Consumer<ArrayList<Match>> responseCallback) {
         dataModel.getMatches(

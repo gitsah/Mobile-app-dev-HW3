@@ -1,6 +1,7 @@
 package com.example.sahand.homework3;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -86,10 +87,30 @@ public class MatchesFragment extends Fragment {
                 holder.name.setText(matches.get(index).getName());
                 holder.name.setTag(matches.get(index).getUid());
                 holder.description.setText(matches.get(index).getDescription());
+
+                if(matches.get(index).getLiked()) {
+                    System.out.println("hit it");
+                    holder.likeButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_liked));
+                    holder.likeButton.setTag(true);
+                }
+                else {
+                    holder.likeButton.setImageResource(R.drawable.ic_unliked);
+                    holder.likeButton.setTag(false);
+                }
+
                 holder.likeButton.setOnClickListener(v -> {
-                    String toastText = "You liked " + holder.name.getText();
+                    String toastText;
+
+                    if(holder.likeButton.getTag().equals(true)) {
+                        firebaseDataModel.unlikeMatch(holder.name.getTag().toString());
+                        toastText = "You unliked " + holder.name.getText();
+                    }
+                    else {
+                        firebaseDataModel.likeMatch(holder.name.getTag().toString());
+                        toastText = "You liked " + holder.name.getText();
+                    }
+
                     Toast.makeText(v.getContext(), toastText, Toast.LENGTH_SHORT).show();
-                    firebaseDataModel.likeMatch(holder.name.getTag().toString());
                 });
             }
         }
