@@ -63,7 +63,6 @@ public class MainActivityTest {
 
     @Test
     public void to2ndPageAndBack() throws InterruptedException {
-        goOffline();
         onView(withId(R.id.name_field)).perform(typeText("John Michaels")).perform(closeSoftKeyboard());
         onView(withId(R.id.date_of_birth_field)).perform(typeText("01/20/1989")).perform(closeSoftKeyboard());
         onView(withId(R.id.email_field)).perform(typeText("JohnM@gmail.com")).perform(closeSoftKeyboard());
@@ -90,6 +89,38 @@ public class MainActivityTest {
         onView(withId(R.id.username_field)).check(matches(withText("")));
         onView(withId(R.id.occupation_field)).check(matches(withText("")));
         onView(withId(R.id.description_field)).check(matches(withText("")));
+    }
+
+    @Test
+    public void settingsRepopulate() {
+        onView(withId(R.id.name_field)).perform(typeText("John Michaels")).perform(closeSoftKeyboard());
+        onView(withId(R.id.date_of_birth_field)).perform(typeText("01/20/1989")).perform(closeSoftKeyboard());
+        onView(withId(R.id.email_field)).perform(typeText("JohnM@gmail.com")).perform(closeSoftKeyboard());
+        onView(withId(R.id.username_field)).perform(typeText("JohnM")).perform(closeSoftKeyboard());
+        onView(withId(R.id.occupation_field)).perform(typeText("Carpenter")).perform(closeSoftKeyboard());
+        onView(withId(R.id.description_field)).perform(typeText("I'm a pretty cool dude")).perform(closeSoftKeyboard());
+        onView(withId(R.id.submit_button)).perform(click());
+        onView(withId(R.id.viewpager)).perform(swipeLeft());
+        onView(withId(R.id.viewpager)).perform(swipeLeft());
+        onView(withId(R.id.settings_reminder_time_field)).perform(replaceText("9:02")).perform(closeSoftKeyboard());
+        onView(withId(R.id.settings_age_range_min_field)).perform(replaceText("20")).perform(closeSoftKeyboard());
+        onView(withId(R.id.settings_age_range_max_field)).perform(replaceText("30")).perform(closeSoftKeyboard());
+        onView(withId(R.id.settings_interested_gender_field)).perform(replaceText("female")).perform(closeSoftKeyboard());
+        onView(withId(R.id.settings_gender_field)).perform(replaceText("male")).perform(closeSoftKeyboard());
+        onView(withId(R.id.settings_maximum_distance_field)).perform(replaceText("30")).perform(closeSoftKeyboard());
+        onView(withId(R.id.settings_save_button)).perform(click());
+        Espresso.pressBack();
+
+        onView(withId(R.id.name_field)).perform(typeText("John Michaels")).perform(closeSoftKeyboard());
+        onView(withId(R.id.date_of_birth_field)).perform(typeText("01/20/1989")).perform(closeSoftKeyboard());
+        onView(withId(R.id.email_field)).perform(typeText("JohnM@gmail.com")).perform(closeSoftKeyboard());
+        onView(withId(R.id.username_field)).perform(typeText("JohnM")).perform(closeSoftKeyboard());
+        onView(withId(R.id.occupation_field)).perform(typeText("Carpenter")).perform(closeSoftKeyboard());
+        onView(withId(R.id.description_field)).perform(typeText("I'm a pretty cool dude")).perform(closeSoftKeyboard());
+        onView(withId(R.id.submit_button)).perform(click());
+        onView(withId(R.id.viewpager)).perform(swipeLeft());
+        onView(withId(R.id.viewpager)).perform(swipeLeft());
+        onView(withId(R.id.settings_maximum_distance_field)).check(matches(withText("30")));
     }
 
     //helper
