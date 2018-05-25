@@ -13,8 +13,8 @@ public interface SettingsDao {
     List<LocalSettings> getAll();
 
     @Query("SELECT * FROM localsettings WHERE userId LIKE :id LIMIT 1")
-    LocalSettings findById(String id);
+    LocalSettings findById(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(LocalSettings... localSettings);
+    void insert(LocalSettings localSettings);
 }

@@ -1,7 +1,6 @@
 package com.example.sahand.homework3;
 
-import android.content.Context;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,8 +9,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Switch;
 
+import java.lang.ref.WeakReference;
+
 public class SettingsFragment extends Fragment {
-    private LocalSettings localSettings;
 
     private EditText reminderTime;
     private EditText maxDistance;
@@ -34,48 +34,103 @@ public class SettingsFragment extends Fragment {
         ageMaxInterest = view.findViewById(R.id.settings_age_range_max_field);
         privacy = view.findViewById(R.id.settings_privacy_switch);
 
-
-        if(localSettings != null) {
-            reminderTime.setText(localSettings.getReminderTime());
-            maxDistance.setText(localSettings.getMaxDistance());
-            gender.setText(localSettings.getGender());
-            genderInterest.setText(localSettings.getGenderInterest());
-            ageMinInterest.setText(localSettings.getAgeMinInterest());
-            ageMaxInterest.setText(localSettings.getAgeMaxInterest());
-            privacy.setChecked(localSettings.isPrivacy());
-        }
-
+        new GetSettingsTask(this, 0).execute();
 
         // Inflate the layout for this fragment
         return view;
     }
 
     public void saveSettings(View v) {
-        //do things
+        LocalSettings localSettings = new LocalSettings(0, reminderTime.getText().toString(),
+                maxDistance.getText().toString(), gender.getText().toString(), genderInterest.getText().toString(),
+                ageMinInterest.getText().toString(), ageMaxInterest.getText().toString(), privacy.isChecked());
+
+        new UpdateSettingsTask(this, localSettings).execute();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        LocalSettings localSettings = new LocalSettings(0, reminderTime.getText().toString(),
+                maxDistance.getText().toString(), gender.getText().toString(), genderInterest.getText().toString(),
+                ageMinInterest.getText().toString(), ageMaxInterest.getText().toString(), privacy.isChecked());
 
-        //load fields into the database
+        new UpdateSettingsTask(this, localSettings).execute();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
+        new GetSettingsTask(this, 0).execute();
 
-        if(localSettings != null) {
-            reminderTime.setText(localSettings.getReminderTime());
-            maxDistance.setText(localSettings.getMaxDistance());
-            gender.setText(localSettings.getGender());
-            genderInterest.setText(localSettings.getGenderInterest());
-            ageMinInterest.setText(localSettings.getAgeMinInterest());
-            ageMaxInterest.setText(localSettings.getAgeMaxInterest());
-            privacy.setChecked(localSettings.isPrivacy());
-        }
-        //populate fields using the database
     }
 
+    private static class GetSettingsTask extends AsyncTask<Void, Void, LocalSettings> {
+
+        private WeakReference<SettingsFragment> weakFragment;
+        private int userId;
+
+        GetSettingsTask(SettingsFragment settingsFragment, int userId) {
+            weakFragment = new WeakReference<>(settingsFragment);
+            this.userId = userId;
+        }
+
+        @Override
+        protected LocalSettings doInBackground(Void... voids) {
+            SettingsFragment settingsFragment = weakFragment.get();
+            if (settingsFragment == null) {
+                return null;
+            }
+
+            AppDatabase db = AppDatabaseSingleton.getDatabase(settingsFragment.getContext());
+
+            LocalSettings localSettings = db.settingsDao().findById(userId);
+
+            if (localSettings == null) {
+                return null;
+            } else
+                return localSettings;
+        }
+
+        @Override
+        protected void onPostExecute(LocalSettings localSettings) {
+            SettingsFragment settingsFragment = weakFragment.get();
+            if (localSettings == null || settingsFragment == null) {
+                return;
+            }
+
+            settingsFragment.reminderTime.setText(localSettings.getReminderTime());
+            settingsFragment.maxDistance.setText(localSettings.getMaxDistance());
+            settingsFragment.gender.setText(localSettings.getGender());
+            settingsFragment.genderInterest.setText(localSettings.getGenderInterest());
+            settingsFragment.ageMinInterest.setText(localSettings.getAgeMinInterest());
+            settingsFragment.ageMaxInterest.setText(localSettings.getAgeMaxInterest());
+            settingsFragment.privacy.setChecked(localSettings.isPrivacy());
+        }
+    }
+
+    private static class UpdateSettingsTask extends AsyncTask<Void, Void, LocalSettings> {
+
+        private WeakReference<SettingsFragment> weakFragment;
+        private LocalSettings localSettings;
+
+        public UpdateSettingsTask(SettingsFragment settingsFragment, LocalSettings localSettings) {
+            weakFragment = new WeakReference<>(settingsFragment);
+            this.localSettings = localSettings;
+        }
+
+        @Override
+        protected LocalSettings doInBackground(Void... voids) {
+            SettingsFragment settingsFragment = weakFragment.get();
+            if (settingsFragment == null) {
+                return null;
+            }
+
+            AppDatabase db = AppDatabaseSingleton.getDatabase(settingsFragment.getContext());
+
+            db.settingsDao().insert(localSettings);
+            return localSettings;
+        }
+    }
 }

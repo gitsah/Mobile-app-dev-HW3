@@ -2,6 +2,7 @@ package com.example.sahand.homework3;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
@@ -24,6 +25,9 @@ public class LocalSettings {
     @ColumnInfo(name = "privacy")
     private boolean privacy;
 
+    public LocalSettings() {}
+
+    @Ignore
     public LocalSettings(int userId, String reminderTime, String maxDistance, String gender,
                          String genderInterest, String ageMinInterest, String ageMaxInterest, boolean privacy) {
         this.userId = userId;
