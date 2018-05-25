@@ -39,9 +39,15 @@ public class SettingsFragment extends Fragment {
     }
 
     public void saveSettings(View v) {
-        LocalSettings localSettings = new LocalSettings(0, reminderTime.getText().toString(),
-                maxDistance.getText().toString(), gender.getText().toString(), genderInterest.getText().toString(),
-                ageMinInterest.getText().toString(), ageMaxInterest.getText().toString(), privacy.isChecked());
+        LocalSettings localSettings = new LocalSettings();
+        localSettings.setUserId(0);
+        localSettings.setReminderTime(reminderTime.getText().toString());
+        localSettings.setMaxDistance(maxDistance.getText().toString());
+        localSettings.setGender(gender.getText().toString());
+        localSettings.setGenderInterest(genderInterest.getText().toString());
+        localSettings.setAgeMinInterest(ageMinInterest.getText().toString());
+        localSettings.setAgeMaxInterest(ageMaxInterest.getText().toString());
+        localSettings.setPrivacy(privacy.isChecked());
 
         new UpdateSettingsTask(this, localSettings).execute();
     }
