@@ -108,7 +108,7 @@ public class MainActivityTest {
         onView(withId(R.id.settings_interested_gender_field)).perform(replaceText("female")).perform(closeSoftKeyboard());
         onView(withId(R.id.settings_gender_field)).perform(replaceText("male")).perform(closeSoftKeyboard());
         onView(withId(R.id.settings_maximum_distance_field)).perform(replaceText("30")).perform(closeSoftKeyboard());
-        //onView(withId(R.id.settings_save_button)).perform(click());
+        onView(withId(R.id.settings_save_button)).perform(click());
         Espresso.pressBack();
 
         onView(withId(R.id.name_field)).perform(typeText("John Michaels")).perform(closeSoftKeyboard());
