@@ -102,12 +102,12 @@ public class MainActivityTest {
         onView(withId(R.id.submit_button)).perform(click());
         onView(withId(R.id.viewpager)).perform(swipeLeft());
         onView(withId(R.id.viewpager)).perform(swipeLeft());
-        onView(withId(R.id.settings_reminder_time_field)).perform(replaceText("9:02")).perform(closeSoftKeyboard());
-        onView(withId(R.id.settings_age_range_min_field)).perform(replaceText("20")).perform(closeSoftKeyboard());
-        onView(withId(R.id.settings_age_range_max_field)).perform(replaceText("30")).perform(closeSoftKeyboard());
-        onView(withId(R.id.settings_interested_gender_field)).perform(replaceText("female")).perform(closeSoftKeyboard());
-        onView(withId(R.id.settings_gender_field)).perform(replaceText("male")).perform(closeSoftKeyboard());
-        onView(withId(R.id.settings_maximum_distance_field)).perform(replaceText("30")).perform(closeSoftKeyboard());
+        onView(withId(R.id.settings_reminder_time_field)).perform(replaceText("9:02"));
+        onView(withId(R.id.settings_age_range_min_field)).perform(replaceText("20"));
+        onView(withId(R.id.settings_age_range_max_field)).perform(replaceText("32"));
+        onView(withId(R.id.settings_interested_gender_field)).perform(replaceText("female"));
+        onView(withId(R.id.settings_gender_field)).perform(replaceText("male"));
+        onView(withId(R.id.settings_maximum_distance_field)).perform(replaceText("30"));
         onView(withId(R.id.settings_save_button)).perform(click());
         Espresso.pressBack();
 
