@@ -33,4 +33,13 @@
         deserunt mollit anim id est laborum.
     </string>
     <string name="detail_location">"8 Rue Scribe, 75009 Paris, France"</string>
+    <string name="interested_age_range">Interested Age Range</string>
+    <string name="make_account_private">Make account private?</string>
+    <string name="gender">Gender</string>
+    <string name="maximum_distance_search_miles">Maximum Distance Search (Miles)</string>
+    <string name="daily_matches_reminder_time">Daily Matches Reminder Time</string>
+    <string name="min_age">Min Age</string>
+    <string name="max_age">Max Age</string>
+    <string name="interested_gender">Interested Gender</string>
+    <string name="save">Save</string>
 </resources>

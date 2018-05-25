@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity
         descriptionField.setText("");
         occupationField.setText("");
     }
+
     public void submitForm(View v) {
 
         if(nameField.getText().toString().length() == 0 | usernameField.getText().toString().length() == 0

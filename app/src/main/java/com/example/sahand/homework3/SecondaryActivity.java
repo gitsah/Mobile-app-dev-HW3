@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class SecondaryActivity extends AppCompatActivity {
 
     private Bundle profileBundle;
     private MatchesFragment matchesFragment;
+    private SettingsFragment settingsFragment;
     private Adapter adapter;
 
     @Override
@@ -38,6 +40,8 @@ public class SecondaryActivity extends AppCompatActivity {
         profileBundle.putString(ARG_PARAM_DESCRIPTION, getIntent().getStringExtra("DESCRIPTION"));
 
         matchesFragment = new MatchesFragment();
+
+        settingsFragment = new SettingsFragment();
 
         firebaseMatchesViewModel.getMatches(
                 (ArrayList<Match> matches) -> {
@@ -84,11 +88,16 @@ public class SecondaryActivity extends AppCompatActivity {
 //        super.onSaveInstanceState(savedInstanceState);
 //    }
 
+
+    public void saveSettings(View v) {
+        settingsFragment.saveSettings(v);
+    }
+
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
         adapter.addFragment(new ProfileFragment(), "Profile", profileBundle);
         adapter.addFragment(matchesFragment, "Matches");
-        adapter.addFragment(new SettingsFragment(), "Settings");
+        adapter.addFragment(settingsFragment, "Settings");
         viewPager.setAdapter(adapter);
     }
 
