@@ -34,8 +34,6 @@ public class SettingsFragment extends Fragment {
         ageMaxInterest = view.findViewById(R.id.settings_age_range_max_field);
         privacy = view.findViewById(R.id.settings_privacy_switch);
 
-        new GetSettingsTask(this, 0).execute();
-
         // Inflate the layout for this fragment
         return view;
     }
