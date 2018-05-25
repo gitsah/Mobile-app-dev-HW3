@@ -46,17 +46,6 @@ public class SecondaryActivity extends AppCompatActivity {
         firebaseMatchesViewModel.getMatches(
                 (ArrayList<Match> matches) -> {
                     matchesFragment.updateMatches(matches);
-
-//            matchesBundle = new Bundle();
-//            matchesBundle.putParcelableArrayList(ARG_DATA_SET, matches);
-//            //matchesBundle.putString("test","test");
-//
-//            MatchesFragment matchesFragment = new MatchesFragment();
-//            matchesFragment.setArguments(matchesBundle);
-//
-//
-//                    System.out.println("here now");
-//            adapter.replaceFragment(matchesFragment, "Matches", 1);
                 }
         );
 
