@@ -42,4 +42,10 @@
     <string name="max_age">Max Age</string>
     <string name="interested_gender">Interested Gender</string>
     <string name="save">Save</string>
+    <string name="enable_location">Enable Location</string>
+    <string name="location_message">Your Locations Settings is set to \'Off\'. Please Enable Location to use this app</string>
+    <string name="location_settings">Location Settings</string>
+    <string name="location_cancel">Cancel</string>
+    <string name="network_provider_started_running">Network provider started running</string>
+    <string name="network_provider_update">Network Provider update</string>
 </resources>

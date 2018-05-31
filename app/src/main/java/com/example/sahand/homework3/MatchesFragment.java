@@ -1,7 +1,7 @@
 package com.example.sahand.homework3;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MatchesFragment extends Fragment {
 
@@ -26,11 +27,14 @@ public class MatchesFragment extends Fragment {
     private RecyclerView recyclerView;
     private ContentAdapter adapter;
 
+    private double currentLat, currentLong;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         recyclerView = (RecyclerView) inflater.inflate(
                 R.layout.recycler_view, container, false);
+
 
         adapter = new ContentAdapter(recyclerView.getContext());
         recyclerView.setAdapter(adapter);
@@ -40,11 +44,17 @@ public class MatchesFragment extends Fragment {
         return recyclerView;
     }
 
+
     public void updateMatches(ArrayList<Match> matches) {
         this.matches = matches;
 
         adapter = new ContentAdapter(recyclerView.getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    public void updateLocation(double currentLat, double currentLong) {
+        this.currentLat = currentLat;
+        this.currentLong = currentLong;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -80,7 +90,30 @@ public class MatchesFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             int size = matches.size();
 
+            System.out.println(currentLat);
+            if(currentLat != 0) {
+                Location locationA = new Location("point A");
+                Location locationB = new Location("point B");
+                locationA.setLatitude(currentLat);
+                locationA.setLongitude(currentLong);
+
+
+                for (Iterator<Match> iterator = matches.iterator(); iterator.hasNext(); ) {
+                    Match match = iterator.next();
+                    locationB.setLatitude(Double.parseDouble(match.getLat()));
+                    locationB.setLongitude(Double.parseDouble(match.getLongitude()));
+                    double distance = locationA.distanceTo(locationB) * 0.000621371;
+
+                    System.out.println(distance);
+                    if (distance > 10) {
+                        iterator.remove();
+                    }
+                }
+            }
+            size = matches.size();
+
             if(size > 0){
+
                 int index = position % matches.size();
                 String url = matches.get(index).getImageUrl();
                 Picasso.get().load(url).into(holder.picture);

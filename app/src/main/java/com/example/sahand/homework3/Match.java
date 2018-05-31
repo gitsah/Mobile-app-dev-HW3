@@ -8,6 +8,8 @@ public class Match implements Parcelable {
     private String imageUrl;
     private String uid;
     private String description;
+    private String lat;
+    private String longitude;
     private boolean liked;
 
     public Match() {}
@@ -26,6 +28,8 @@ public class Match implements Parcelable {
         imageUrl = in.readString();
         uid = in.readString();
         description = in.readString();
+        lat = in.readString();
+        longitude = in.readString();
         liked = in.readByte() != 0;
     }
 
@@ -57,6 +61,14 @@ public class Match implements Parcelable {
         return description;
     }
 
+    public String getLat() {
+        return lat;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
     public boolean getLiked() {
         return liked;
     }
@@ -71,6 +83,8 @@ public class Match implements Parcelable {
         dest.writeString(name);
         dest.writeString(imageUrl);
         dest.writeString(description);
+        dest.writeString(lat);
+        dest.writeString(longitude);
         dest.writeByte((byte) (liked ? 1 : 0));
     }
 }
