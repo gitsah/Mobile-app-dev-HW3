@@ -3,7 +3,7 @@ package com.example.sahand.homework3;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Match implements Parcelable {
+public class Match {
     private String name;
     private String imageUrl;
     private String uid;
@@ -12,38 +12,8 @@ public class Match implements Parcelable {
     private String longitude;
     private boolean liked;
 
-    public Match() {}
-
-//    public Match(String name, String imageUrl, String uid, boolean liked) {
-//        this.name = name;
-//        this.imageUrl = imageUrl;
-//        this.uid = uid;
-//        this.liked = liked;
-//
-//        this.description = "Placeholder Description";
-//    }
-
-    protected Match(Parcel in) {
-        name = in.readString();
-        imageUrl = in.readString();
-        uid = in.readString();
-        description = in.readString();
-        lat = in.readString();
-        longitude = in.readString();
-        liked = in.readByte() != 0;
+    public Match() {
     }
-
-    public static final Creator<Match> CREATOR = new Creator<Match>() {
-        @Override
-        public Match createFromParcel(Parcel in) {
-            return new Match(in);
-        }
-
-        @Override
-        public Match[] newArray(int size) {
-            return new Match[size];
-        }
-    };
 
     public String getName() {
         return name;
@@ -71,20 +41,5 @@ public class Match implements Parcelable {
 
     public boolean getLiked() {
         return liked;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(imageUrl);
-        dest.writeString(description);
-        dest.writeString(lat);
-        dest.writeString(longitude);
-        dest.writeByte((byte) (liked ? 1 : 0));
     }
 }
