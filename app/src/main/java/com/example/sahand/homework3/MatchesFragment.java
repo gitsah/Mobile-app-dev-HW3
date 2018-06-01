@@ -27,7 +27,7 @@ public class MatchesFragment extends Fragment {
     private RecyclerView recyclerView;
     private ContentAdapter adapter;
 
-    private double currentLat, currentLong;
+    //private double currentLat, currentLong;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,16 +45,32 @@ public class MatchesFragment extends Fragment {
     }
 
 
-    public void updateMatches(ArrayList<Match> matches) {
+    public void updateMatches(ArrayList<Match> matches, double currentLat, double currentLong) {
+        System.out.println(currentLat);
+        if(currentLat != 0 && matches.size() > 0) {
+            Location locationA = new Location("point A");
+            Location locationB = new Location("point B");
+            locationA.setLatitude(currentLat);
+            locationA.setLongitude(currentLong);
+
+
+            for (Iterator<Match> iterator = matches.iterator(); iterator.hasNext(); ) {
+                Match match = iterator.next();
+                locationB.setLatitude(Double.parseDouble(match.getLat()));
+                locationB.setLongitude(Double.parseDouble(match.getLongitude()));
+                double distance = locationA.distanceTo(locationB) * 0.000621371;
+
+                System.out.println(distance);
+                if (distance > 10) {
+                    iterator.remove();
+                }
+            }
+        }
+
         this.matches = matches;
 
         adapter = new ContentAdapter(recyclerView.getContext());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    }
-
-    public void updateLocation(double currentLat, double currentLong) {
-        this.currentLat = currentLat;
-        this.currentLong = currentLong;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -90,27 +106,7 @@ public class MatchesFragment extends Fragment {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             int size = matches.size();
 
-            System.out.println(currentLat);
-            if(currentLat != 0) {
-                Location locationA = new Location("point A");
-                Location locationB = new Location("point B");
-                locationA.setLatitude(currentLat);
-                locationA.setLongitude(currentLong);
 
-
-                for (Iterator<Match> iterator = matches.iterator(); iterator.hasNext(); ) {
-                    Match match = iterator.next();
-                    locationB.setLatitude(Double.parseDouble(match.getLat()));
-                    locationB.setLongitude(Double.parseDouble(match.getLongitude()));
-                    double distance = locationA.distanceTo(locationB) * 0.000621371;
-
-                    System.out.println(distance);
-                    if (distance > 10) {
-                        iterator.remove();
-                    }
-                }
-            }
-            size = matches.size();
 
             if(size > 0){
 

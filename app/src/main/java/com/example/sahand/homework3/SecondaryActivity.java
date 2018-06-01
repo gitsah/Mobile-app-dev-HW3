@@ -33,6 +33,7 @@ public class SecondaryActivity extends AppCompatActivity {
     private MatchesFragment matchesFragment;
     private SettingsFragment settingsFragment;
     private Adapter adapter;
+    private ArrayList<Match> matches;
 
     private LocationManager locationManager;
     private double longitudeNetwork, latitudeNetwork;
@@ -61,7 +62,8 @@ public class SecondaryActivity extends AppCompatActivity {
 
         firebaseMatchesViewModel.getMatches(
                 (ArrayList<Match> matches) -> {
-                    matchesFragment.updateMatches(matches);
+                    this.matches = matches;
+                    matchesFragment.updateMatches(this.matches, latitudeNetwork, longitudeNetwork);
                 }
         );
 
@@ -182,9 +184,12 @@ public class SecondaryActivity extends AppCompatActivity {
             longitudeNetwork = location.getLongitude();
             latitudeNetwork = location.getLatitude();
 
+            //hardcoded location value to seattle if device location not working
+            //longitudeNetwork = -122.335167;
+            //latitudeNetwork = 47.608013;
 
             runOnUiThread(()-> {
-                matchesFragment.updateLocation(latitudeNetwork, longitudeNetwork);
+                matchesFragment.updateMatches(matches, latitudeNetwork, longitudeNetwork);
                 System.out.println("shoulda been called");
             });
         }
