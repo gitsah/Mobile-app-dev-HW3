@@ -16,7 +16,6 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.google.firebase.database.DatabaseReference.goOffline;
 
 public class MainActivityTest {
 
@@ -40,11 +39,11 @@ public class MainActivityTest {
 
     @Test
     public void badDateOfBirth() {
-        onView(withId(R.id.name_field)).perform(typeText("Steve L")).perform(closeSoftKeyboard());
+        onView(withId(R.id.name_field)).perform(typeText("Steve X")).perform(closeSoftKeyboard());
         onView(withId(R.id.date_of_birth_field)).perform(typeText("1-29-1988")).perform(closeSoftKeyboard());
         onView(withId(R.id.username_field)).perform(typeText("SteveL")).perform(closeSoftKeyboard());
         onView(withId(R.id.occupation_field)).perform(typeText("Waiter")).perform(closeSoftKeyboard());
-        onView(withId(R.id.description_field)).perform(typeText("I'm a pretty cool dude")).perform(closeSoftKeyboard());
+        onView(withId(R.id.description_field)).perform(typeText("I'm a pretty dumb dude")).perform(closeSoftKeyboard());
         onView(withId(R.id.email_field)).perform(typeText("jackson@gmail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.submit_button)).perform(click());
         onView(withId(R.id.validation_text)).check(matches(withText(R.string.underEighteen)));
