@@ -39,11 +39,11 @@ public class MainActivityTest {
 
     @Test
     public void badDateOfBirth() {
-        onView(withId(R.id.name_field)).perform(typeText("Steve X")).perform(closeSoftKeyboard());
+        onView(withId(R.id.name_field)).perform(typeText("Steve N")).perform(closeSoftKeyboard());
         onView(withId(R.id.date_of_birth_field)).perform(typeText("1-29-1988")).perform(closeSoftKeyboard());
-        onView(withId(R.id.username_field)).perform(typeText("SteveL")).perform(closeSoftKeyboard());
+        onView(withId(R.id.username_field)).perform(typeText("SteveN")).perform(closeSoftKeyboard());
         onView(withId(R.id.occupation_field)).perform(typeText("Waiter")).perform(closeSoftKeyboard());
-        onView(withId(R.id.description_field)).perform(typeText("I'm a pretty dumb dude")).perform(closeSoftKeyboard());
+        onView(withId(R.id.description_field)).perform(typeText("I'm a pretty coolish dude")).perform(closeSoftKeyboard());
         onView(withId(R.id.email_field)).perform(typeText("jackson@gmail.com")).perform(closeSoftKeyboard());
         onView(withId(R.id.submit_button)).perform(click());
         onView(withId(R.id.validation_text)).check(matches(withText(R.string.underEighteen)));
