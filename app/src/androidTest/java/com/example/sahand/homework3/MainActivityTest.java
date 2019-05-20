@@ -70,8 +70,8 @@ public class MainActivityTest {
         onView(withId(R.id.description_field)).perform(typeText("I'm a pretty cool dude")).perform(closeSoftKeyboard());
         onView(withId(R.id.submit_button)).perform(click());
         onView(withText("CANCEL")).perform(click());
-
-        onView(withId(R.id.name_and_age_display)).check(matches(withText("John Michaels, 29")));
+        Thread.sleep(600);
+        onView(withId(R.id.name_and_age_display)).check(matches(withText("John Michaels, 30")));
         onView(withId(R.id.occupation_display)).check(matches(withText("Carpenter")));
         onView(withId(R.id.description_display)).check(matches(withText("I'm a pretty cool dude")));
         onView(withId(R.id.viewpager)).perform(swipeLeft());
